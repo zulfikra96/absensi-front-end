@@ -11,24 +11,26 @@ interface EmployeesProps {
 }
 
 interface EmployeesState {
-    auth:boolean
+    auth:boolean,
 }
 
  class Employess extends React.Component<EmployeesProps, EmployeesState> {
      constructor(props){
          super(props)
          this.state = {
-             auth:true
+             auth:true,
          }
-        Auth(['company'])
-
      }
+
+    componentDidMount(){
+        Auth(['company'])
+    }
 
     render = () => {
         if(!this.props.authorized) return <Unauthorized/>
         return <Views/>
     }
-    
+
 }
 
 const mapStateToprops = (props) => {
