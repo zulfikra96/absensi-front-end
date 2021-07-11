@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { setErrorMessage, setToken } from "../../redux/reducers/auth";
+import { setAuthorized, setErrorMessage, setToken } from "../../redux/reducers/auth";
 import Views from "./views";
 import VARIABLE from "../../config/variable"
 import { withRouter, NextRouter} from "next/router";
@@ -68,12 +68,14 @@ interface LoginState {
                 },
                 body:JSON.stringify({
                     email,
-                    password
+                    password,
+                    role:'company'
                 })
             })
             .then((res) => res.json())
             if(RESPONSE.status_code !== 200) throw RESPONSE.message
             this.props.dispatch(setToken(RESPONSE.data.token))
+            this.props.dispatch(setAuthorized(true));
             this.props.router.push("/dashboard")
         } catch (error) {
             this.props.dispatch(setErrorMessage(error));

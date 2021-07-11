@@ -9,7 +9,7 @@ const rootReducer = combineReducers({
     auth:authReducer
 })
 
-const store = createStore(rootReducer,applyMiddleware(thunk));
+export const store = createStore(rootReducer,applyMiddleware(thunk));
 
 const makeStore = (contex:Context) => store
 

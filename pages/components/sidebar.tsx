@@ -1,5 +1,5 @@
 import { Nav } from "react-bootstrap";
-
+import Link from "next/link"
 const SideBar = () => (
     <div className="flex-initial w-2/12 bg-gray-500 h-full shadow-2xl border-none">
         <div className="top-side-bar h-40 bg-gray-700">
@@ -9,7 +9,7 @@ const SideBar = () => (
         <div className="bottom-side-bar px-4 py-6">
             <Nav className="flex-column">
                 <Nav.Link className="text-white font-bold hover:bg-gray-700 transition-all">Dashboard</Nav.Link>
-                <Nav.Link className="text-white font-bold hover:bg-gray-700 transition-all">Karyawan</Nav.Link>
+                <Nav.Link className="font-bold hover:bg-gray-700 transition-all outline-none"><Link href="/employees"><span className="text-white">Karyawan</span></Link></Nav.Link>
                 <Nav.Link className="text-white font-bold hover:bg-gray-700 transition-all">Inventaris</Nav.Link>
                 <Nav.Link className="text-white font-bold hover:bg-gray-700 transition-all">Pengaturan</Nav.Link>
             </Nav>

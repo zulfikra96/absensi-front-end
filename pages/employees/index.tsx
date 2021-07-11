@@ -1,5 +1,42 @@
 import React from "react";
+import { connect } from "react-redux";
 import Views from "./views";
-export default class Employess extends React.Component {
-    render = () => <Views/>
+import Unauthorized from "../unauthorized"
+import Auth from "../../config/auth"
+
+interface EmployeesProps {
+    token:string,
+    me:any,
+    authorized
 }
+
+interface EmployeesState {
+    auth:boolean
+}
+
+ class Employess extends React.Component<EmployeesProps, EmployeesState> {
+     constructor(props){
+         super(props)
+         this.state = {
+             auth:true
+         }
+        Auth(['company'])
+
+     }
+
+    render = () => {
+        if(!this.props.authorized) return <Unauthorized/>
+        return <Views/>
+    }
+    
+}
+
+const mapStateToprops = (props) => {
+    return {
+        token:props.auth.token,
+        authorized:props.auth.authorized,
+        me:props.auth.me
+    }
+}
+
+export default connect(mapStateToprops)(Employess);

@@ -13,6 +13,5 @@ const Body = (props: any) => (
 )
 
 Container.Body = Body;
-console.log(Container)
 
 export default Container;

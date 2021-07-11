@@ -3,11 +3,28 @@
 const SET_TOKEN     = "SET_TOKEN";
 const POST_LOGIN    = "POST_LOGIN"
 const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
+const SET_ME        = "SET_ME"
+const SET_AUTHORIZED = "SET_AUTHORIZED"
 /**======================ACTION============================== */
 export const setToken = (token:string) => {
     return {
         type:SET_TOKEN,
         payload:token
+    }
+}
+
+export const setAuthorized = (authorized) => {
+    return {
+        type:SET_AUTHORIZED,
+        payload:authorized
+    }
+}
+
+
+export const setMe = (me) => {
+    return {
+        type:SET_ME,
+        payload:me
     }
 }
 
@@ -32,7 +49,9 @@ const initialState = {
     token:'',
     email:'',
     password:'',
-    error_message:''
+    error_message:'',
+    me:"",
+    authorized:false
 }
 
 /**======================REDUCER============================== */
@@ -45,6 +64,12 @@ const authReducer = (state = initialState, action:any) => {
                 ...state,
                 token:action.payload
             }
+        case SET_ME:
+            localStorage.setItem("me",JSON.stringify(action.payload));
+            return {
+                ...state,
+                me:action.payload
+            }
         case POST_LOGIN:
             return {
                 ...state,
@@ -55,6 +80,11 @@ const authReducer = (state = initialState, action:any) => {
             return {
                 ...state,
                 error_message:action.payload
+            }
+        case SET_AUTHORIZED:
+            return {
+                ...state,
+                authorized:action.payload
             }
         default:
             return state;
