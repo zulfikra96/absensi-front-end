@@ -5,64 +5,80 @@ import Header from "../components/header"
 import Button from "../components/button"
 import Link from "next/link"
 import dynamic from "next/dynamic";
+import { connect } from "react-redux"
+import Pagination from "../components/pagination"
+import { useRouter } from "next/router"
+import variable from "../../config/variable"
 // @ts-ignore
-const BingMap:any = dynamic(() => import("bingmaps-react"))
+const BingMap: any = dynamic(() => import("bingmaps-react"))
 
-const Views = () => (
-    <Container>
-        <SideBar />
-        <Container.Body>
-            <Header
-                active="/employees"
-                title={"Karyawan"} />
-            <div id="content">
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th className="w-20">No ID</th>
-                            <th className="w-90">Nama Lengkap</th>
-                            <th>Email</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Zulfikra</td>
-                            <td>zulfikralahmudin@gmail.com</td>
-                            <td>
-                                <Link href="/employees/1" >
-                                    <a href="" className="hover:no-underline bg-color-blue-cst text-white px-4 py-2.5 text-sm rounded  font-semibold mr-4  ">Detail </a>
-                                </Link>
-                                <Button bgColor="danger" title="Hapus" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </Table>
+const Views = ({ workers }: any) => {
 
-            </div>
-        </Container.Body>
-    </Container>
-)
+    return (
+        <Container>
+            <SideBar />
+            <Container.Body>
+                <Header
+                    active="/employees"
+                    title={"Karyawan"} />
+                <div id="content">
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th className="w-20">No ID</th>
+                                <th className="w-90">Nama Lengkap</th>
+                                <th>Email</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {workers.map((e, i) => {
+                                return (
+                                    <tr key={i}>
+                                        <td>{e.id}</td>
+                                        <td>{e.fullname}</td>
+                                        <td>{e.email}</td>
+                                        <td>
+                                            <Link href={`/employees/${e.worker_id}`} >
+                                                <a href="" className="hover:no-underline bg-color-blue-cst text-white px-4 py-2.5 text-sm rounded  font-semibold mr-4  ">Detail </a>
+                                            </Link>
+                                            <Button bgColor="danger" title="Hapus" />
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+    
+                    </Table>
+                    <div className="footer flex ">
+                        <Pagination
+                            active
+                        />
+                    </div>
+                </div>
+            </Container.Body>
+        </Container>
+    )
+}
 
 export const MapModal = () => (
     <>
-        <Modal 
+        <Modal
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
             show={false} >
             <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+                <Modal.Title>Modal heading</Modal.Title>
             </Modal.Header>
             <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
             <Modal.Footer>
-                <BingMap 
-                      height="500px"
-                      width="100%"
-                      viewOptions={{
-                          zoom:18
-                      }}
+                <BingMap
+                    height="500px"
+                    width="100%"
+                    viewOptions={{
+                        zoom: 18
+                    }}
                     bingMapsKey={"AhkL3-tgHzlKs49gq7u_ZYfINXlkiPlkUGT619tCypvojRcZYNV7MrptnjZ8dR4z"}
                 />
             </Modal.Footer>
@@ -70,7 +86,11 @@ export const MapModal = () => (
     </>
 );
 
-export const ViewsDetail = () => (
+interface WorkerDetailProps  {
+    workerDetail:any
+}
+
+export const ViewsDetail = ({ workerDetail }:WorkerDetailProps) => (
     <Container>
         <SideBar />
         <Container.Body>
@@ -81,12 +101,12 @@ export const ViewsDetail = () => (
                 <div className="flex w-3/12 shadow-sm h-400 py-4 px-4 bg-white justify-center flex-col">
                     <div className="image-wrap flex-initial h-56 self-center w-56 overflow-hidden rounded-lg mb-10">
                         <Image
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Arnold_Schwarzenegger_1974.jpg/412px-Arnold_Schwarzenegger_1974.jpg"
+                            src={`${variable.url}${workerDetail.avatar}`}
                         />
                     </div>
                     <div id="information" className="text-center ">
-                        <h4 className="font-semibold text-gray-700">Zulfikra L. Abdjul</h4>
-                        <h5>zulfikralahmudin@gmail.com</h5>
+                        <h4 className="font-semibold text-gray-700">{workerDetail.fullname}</h4>
+                        <h5>{workerDetail.email}</h5>
                     </div>
                 </div>
                 <div className="flex w-9/12 px-4 py-4 b-white shadow-sm ml-4 flex-col">
@@ -108,14 +128,14 @@ export const ViewsDetail = () => (
                             </select>
                         </div>
                         <div className="form-group ml-4">
-                            <label htmlFor="" className="font-semibold text-sm">Tahun</label><br />   
+                            <label htmlFor="" className="font-semibold text-sm">Tahun</label><br />
                             <select name="" id="" className="py-2 px-4">
                                 <option value="">2020</option>
                                 <option value="">2021</option>
                             </select>
                         </div>
                         <div className="form-group ml-4 flex flex-col justify-end ">
-                            
+
                             <Button bgColor="primary" title="Cari" className=""></Button>
                         </div>
                     </div>
@@ -168,4 +188,10 @@ export const ViewsDetail = () => (
     </Container>
 )
 
-export default Views
+const mapStateToProps = (props) => {
+    return {
+        workers: props.workers.workers
+    }
+}
+
+export default connect(mapStateToProps)(Views)
