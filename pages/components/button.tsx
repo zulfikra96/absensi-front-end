@@ -4,7 +4,8 @@ interface ButtonProps {
     bgColor:'primary' | 'danger',
     size?: 'md' | 'sm',
     className?: string,
-    children?: any
+    children?: any,
+    onClick?:any
 }
 
 const button_color = {
@@ -17,8 +18,8 @@ const button_size = {
     sm:'px-4 py-2 text-sm'
 }
 
-const Button = ({ title, bgColor, size = 'sm', className, children }: ButtonProps) => (
-    <button className={` ${button_color[bgColor]} text-white ${button_size[size]} rounded  font-semibold ${className}`}>{title || children}</button>
+const Button = ({ title, bgColor, size = 'sm', className, children, onClick }: ButtonProps) => (
+    <button onClick={onClick} className={` ${button_color[bgColor]} text-white ${button_size[size]} rounded  font-semibold ${className}`}>{title || children}</button>
 );
 
 export default Button;
