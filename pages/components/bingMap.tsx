@@ -58,15 +58,29 @@ const getMap = (props) => {
 }
 
 const BingMap = (props: BingMapProps) => {
+    const [isReferesh, setRefresh] = useState(false)
+    useEffect(() => {
+        if(isReferesh){
+            setTimeout(() => {
+                getMap(props);
+            },1800)
+        }
+    })
     useEffect(() => {
         setTimeout(() => {
-            getMap(props)
-        },1000)
-    })
+            try {
+                getMap(props)
+            } catch (error) {
+                setRefresh(true);
+            }
+        })
+    },[])
+
+   
     return (
         <div className="relative">
             <div id="myMap" className="flex" style={{ width: "40vw", height: 400 }}></div>
-            <Script src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhkL3-tgHzlKs49gq7u_ZYfINXlkiPlkUGT619tCypvojRcZYNV7MrptnjZ8dR4z'  />
+            <Script src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhkL3-tgHzlKs49gq7u_ZYfINXlkiPlkUGT619tCypvojRcZYNV7MrptnjZ8dR4z' async defer />
         </div>
     )
 }
