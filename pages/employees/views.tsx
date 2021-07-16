@@ -12,11 +12,13 @@ import moment from "moment-timezone";
 import BingMap from "../components/bingMap";
 import { store } from "../../redux/store"
 import { setAttendancesDetail } from "../../redux/reducers/workers"
-const Views = ({ workers }: any) => {
+import ModalCustom from "../components/modal"
+import { useState } from "react"
 
+const Views = ({ workers }: any) => {
     return (
         <Container>
-            <SideBar />
+            <SideBar active={'Karyawan'} />
             <Container.Body>
                 <Header
                     active="/employees"
@@ -48,7 +50,7 @@ const Views = ({ workers }: any) => {
                                 );
                             })}
                         </tbody>
-    
+
                     </Table>
                     <div className="footer flex ">
                         <Pagination
@@ -62,18 +64,18 @@ const Views = ({ workers }: any) => {
 }
 
 interface MapModalProps {
-    isOpen?:boolean,
-    onHide?:any,
-    children?:any
+    isOpen?: boolean,
+    onHide?: any,
+    children?: any
 }
 
-export const MapModal = ({ isOpen, onHide, children }:MapModalProps) => (
+export const MapModal = ({ isOpen, onHide, children }: MapModalProps) => (
     <>
         <Modal
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
-            show={isOpen} 
+            show={isOpen}
             onHide={onHide}>
             <Modal.Header closeButton>
                 <Modal.Title>Modal heading</Modal.Title>
@@ -85,21 +87,27 @@ export const MapModal = ({ isOpen, onHide, children }:MapModalProps) => (
     </>
 );
 
-interface WorkerDetailProps  {
-    workerDetail:any,
-    workerAttendances?:Array<any>,
-    showMap?:boolean,
-    onClickShowMap:any,
-    onClickCloseMap:any,
-    attendancesDetail?:any,
-    onClickDetailMap?:any
+interface WorkerDetailProps {
+    workerDetail: any,
+    workerAttendances?: Array<any>,
+    showMap?: boolean,
+    onClickShowMap: any,
+    onClickCloseMap: any,
+    attendancesDetail?: any,
+    onClickDetailMap?: any
 }
 
-export const ViewsDetail = ({ workerDetail, workerAttendances = [], showMap, onClickShowMap, onClickCloseMap }:WorkerDetailProps) => {
 
+export const ViewsDetail = ({ workerDetail, workerAttendances = [], showMap, onClickShowMap, onClickCloseMap }: WorkerDetailProps) => {
+
+    const [showModal, setShowModal] = useState(false);
+    const [photoLocation, setPhotoLocation] = useState({
+        attendance_type:"",
+        attendance_id:""
+    });
     return (
         <Container>
-            <SideBar />
+            <SideBar active={'Karyawan'} />
             <Container.Body>
                 <Header
                     active="/employees"
@@ -142,7 +150,7 @@ export const ViewsDetail = ({ workerDetail, workerAttendances = [], showMap, onC
                                 </select>
                             </div>
                             <div className="form-group ml-4 flex flex-col justify-end ">
-    
+
                                 <Button bgColor="primary" title="Cari" className=""></Button>
                             </div>
                         </div>
@@ -169,22 +177,47 @@ export const ViewsDetail = ({ workerDetail, workerAttendances = [], showMap, onC
                                 {workerAttendances.map((e) => {
                                     return (
                                         <tr key={e.id}>
-                                    <td>{e.id}</td>
-                                    <td>{moment(e.check_in).tz("Asia/Makassar").format("MMMM Do YYYY HH:mm:ss")}</td>
-                                    <td>{e.check_in_location.locality}, {e.check_in_location.addressLine}</td>
-                                    <td>{(e.check_in_distance_status) ? <div className="border border-green-500 bg-green-400 p-1 rounded-lg text-white font-semibold text-sm text-center">Dalam Radius</div> : <div className="border border-green-500 bg-red-400 p-1 rounded-lg text-white font-semibold text-sm text-center">Luar Radius</div> }</td>
-                                    <td><Button bgColor="primary" title="Lihat"/></td>
-                                    <td>{(e.check_out) ? moment(e.check_out).tz("Asia/Makassar").format("MMMM Do YYYY HH:mm:ss") :''}</td>
-                                    <td>{(e.check_out_location) ? e.check_in_location.locality :''}, {(e.check_out_location) ? e.check_in_location.addressLine : ''}</td>
-                                    <td>{(e.check_in_distance_status) ? <div className="border border-green-500 bg-green-400 p-1 rounded-lg text-white font-semibold text-sm text-center">Dalam Radius</div> : <div className="border border-green-500 bg-red-400 p-1 rounded-lg text-white font-semibold text-sm text-center">Luar Radius</div> }</td>
-                                    <td><Button   bgColor="primary" title="Lihat"/></td>
-                                    <td>
-                                        <Button bgColor="primary" title="Lihat" onClick={() => {
-                                            store.dispatch(setAttendancesDetail(e))
-                                            onClickShowMap(e.worker_id) 
-                                        }}></Button>
-                                    </td>
-                                </tr>
+                                            <td>{e.id}</td>
+                                            <td>{moment(e.check_in).tz("Asia/Makassar").format("MMMM Do YYYY HH:mm:ss")}</td>
+                                            <td>{e.check_in_location.locality}, {e.check_in_location.addressLine}</td>
+                                            <td>{(e.check_in_distance_status) ? <div className="border border-green-500 bg-green-400 p-1 rounded-lg text-white font-semibold text-sm text-center">Dalam Radius</div> : <div className="border border-green-500 bg-red-400 p-1 rounded-lg text-white font-semibold text-sm text-center">Luar Radius</div>}</td>
+                                            <td>
+                                                <Button 
+                                                    bgColor="primary" 
+                                                    title="Lihat" 
+                                                    onClick={() => {
+                                                        setShowModal(true);
+                                                        setPhotoLocation({
+                                                            attendance_id:e.id,
+                                                            attendance_type:'check_in'
+                                                        })
+                                                    }}
+                                                    />
+                                            </td>
+                                            <td>{(e.check_out) ? moment(e.check_out).tz("Asia/Makassar").format("MMMM Do YYYY HH:mm:ss") : ''}</td>
+                                            <td>{(e.check_out_location) ? e.check_in_location.locality : ''}, {(e.check_out_location) ? e.check_in_location.addressLine : ''}</td>
+                                            <td>
+                                                {(e.check_in_distance_status) ? <div className="border border-green-500 bg-green-400 p-1 rounded-lg text-white font-semibold text-sm text-center">Dalam Radius</div> : <div className="border border-green-500 bg-red-400 p-1 rounded-lg text-white font-semibold text-sm text-center">Luar Radius</div>}
+                                            </td>
+                                            <td>
+                                                <Button
+                                                    onClick={() => {
+                                                        setShowModal(true);
+                                                        setPhotoLocation({
+                                                            attendance_id:e.id,
+                                                            attendance_type:'check_out'
+                                                        })
+                                                    }}
+                                                    bgColor="primary"
+                                                    title="Lihat" />
+                                            </td>
+                                            <td>
+                                                <Button bgColor="primary" title="Lihat" onClick={() => {
+                                                    store.dispatch(setAttendancesDetail(e))
+                                                    onClickShowMap(e.worker_id)
+                                                }}></Button>
+                                            </td>
+                                        </tr>
                                     )
                                 })}
                             </tbody>
@@ -194,8 +227,15 @@ export const ViewsDetail = ({ workerDetail, workerAttendances = [], showMap, onC
                 <MapModal
                     onHide={onClickCloseMap}
                     isOpen={showMap}>
-                        <BingMap/>      
+                    <BingMap />
                 </MapModal>
+                <ModalCustom 
+                    className="h-3/6"
+                    isOpen={showModal}
+                    onHide={() => setShowModal(false)} 
+                    title="Foto Lokasi">
+                    <img src={`${variable.url}/attendances/${photoLocation.attendance_id}/${photoLocation.attendance_type}/photo`} className="w-full" alt="" />
+                </ModalCustom>
             </Container.Body>
         </Container>
     );

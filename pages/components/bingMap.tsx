@@ -1,9 +1,11 @@
 import Script from "next/experimental-script";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 interface BingMapProps {
-    attendances_detail:any
+    attendances_detail: any,
+    office_lat?:any,
+    office_lng?:any
 };
 
 const getMap = (props) => {
@@ -11,40 +13,40 @@ const getMap = (props) => {
     const me = JSON.parse(localStorage.getItem("me") || "{}")
     console.log(me)
     // @ts-ignore
-    var map = new Microsoft.Maps.Map('#myMap',{
-        credentials:"AhkL3-tgHzlKs49gq7u_ZYfINXlkiPlkUGT619tCypvojRcZYNV7MrptnjZ8dR4z",
+    var map = new Microsoft.Maps.Map('#myMap', {
+        credentials: "AhkL3-tgHzlKs49gq7u_ZYfINXlkiPlkUGT619tCypvojRcZYNV7MrptnjZ8dR4z",
         // @ts-ignore
-        center: new Microsoft.Maps.Location(0.5688198302383811,123.04856709606149),
-        zoom:17
+        center: new Microsoft.Maps.Location(0.5688198302383811, 123.04856709606149),
+        zoom: 17
     });
     // @ts-ignore
-    
+
     // @ts-ignore
     const office_location = new Microsoft.Maps.Pushpin({
-        latitude:0.5688198302383811,
-        longitude:123.04856709606149
-    },{
-        title:'Kantor',
-        color:'red',
+        latitude: 0.5688198302383811,
+        longitude: 123.04856709606149
+    }, {
+        title: 'Kantor',
+        color: 'red',
     })
 
     // @ts-ignore
     const check_in = new Microsoft.Maps.Pushpin({
-        latitude:check_in_lat,
-        longitude:check_in_lng
-    },{
-        title:"check in",
-        color:'blue',
+        latitude: check_in_lat,
+        longitude: check_in_lng
+    }, {
+        title: "check in",
+        color: 'blue',
     })
 
-    if(check_out_lat){
+    if (check_out_lat) {
         // @ts-ignore
         const check_out = new Microsoft.Maps.Pushpin({
-            latitude:check_out_lat,
-            longitude:check_out_lng
-        },{
-            title:"check out",
-            color:'green',
+            latitude: check_out_lat,
+            longitude: check_out_lng
+        }, {
+            title: "check out",
+            color: 'green',
         })
         map.entities.push(check_out)
 
@@ -55,25 +57,23 @@ const getMap = (props) => {
     map.entities.push(check_in)
 }
 
-const BingMap = (props:BingMapProps) => {
+const BingMap = (props: BingMapProps) => {
     useEffect(() => {
-      setTimeout(() => getMap(props),1000);
+        setTimeout(() => {
+            getMap(props)
+        },1000)
     })
-    return(
+    return (
         <div className="relative">
-            <div id="myMap" className="flex" style={{ width:"40vw", height:400}}></div>
-            <Script onLoadedMetadata={() => {
-            //    getMap(props)
-            alert("Hello world")
-            }}  src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhkL3-tgHzlKs49gq7u_ZYfINXlkiPlkUGT619tCypvojRcZYNV7MrptnjZ8dR4z' 
-            async defer/>
+            <div id="myMap" className="flex" style={{ width: "40vw", height: 400 }}></div>
+            <Script src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhkL3-tgHzlKs49gq7u_ZYfINXlkiPlkUGT619tCypvojRcZYNV7MrptnjZ8dR4z'  />
         </div>
     )
 }
 
 const mapStateToProps = (props) => {
-    return{
-        attendances_detail:props.workers.attendances_detail,
+    return {
+        attendances_detail: props.workers.attendances_detail,
         worker_detail: props.workers.worker_detail
     }
 }
