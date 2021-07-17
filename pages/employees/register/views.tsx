@@ -2,17 +2,27 @@ import Container from "../../components/container";
 import SideBar from "../../components/sidebar";
 import Header from "../../components/header";
 import FormRegister from "./components/form_register";
-const Views = () =>(
+import { withRouter } from "next/router";
+import { connect } from "react-redux";
+
+interface ViewsProps {
+    onSubmit?:any
+}
+
+const Views = (props: ViewsProps) =>(
     <Container>
-        <SideBar />
+        <SideBar active={'Karyawan'}/>
         <Container.Body>
             <Header
                 active="/employees/register"
                 title="Tambah Karyawan"
             />
-        <FormRegister/>
+        <FormRegister
+            
+            onSubmit={props.onSubmit}
+        />
         </Container.Body>
     </Container>
 );
 
-export default Views;
+export default connect()(Views);
