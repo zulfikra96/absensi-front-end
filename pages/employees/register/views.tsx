@@ -18,7 +18,6 @@ const Views = (props: ViewsProps) =>(
                 title="Tambah Karyawan"
             />
         <FormRegister
-            
             onSubmit={props.onSubmit}
         />
         </Container.Body>

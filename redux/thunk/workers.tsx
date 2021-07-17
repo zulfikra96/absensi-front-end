@@ -50,7 +50,8 @@ export const addNewWorker =  (data:AddNewWorkerData, token: string) => {
             const RESPONSE = await fetch(`${variable.url}/workers`,{
                 method:'POST',
                 headers:{
-                    "Authorization":`Bearer ${token}`
+                    "Content-Type":"application/json",
+                    "Authorization":`Bearer ${token}`,
                 },
                 body:JSON.stringify(data)
             })

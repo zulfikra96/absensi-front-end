@@ -5,6 +5,7 @@ export const SET_ERROR                  = "SET_ERROR"
 export const GET_WORKER_ATTENDANCES     = "GET_WORKER_ATTENDANCES"
 export const SET_ATTENDANCES_DETAIL     = "SET_ATTENDANCES_DETAIL";
 export const OPEN_MAP_MODAL             = "OPEN_MAP_MODAL";
+export const SET_SUCCESS                = "SET_SUCCESS";
 /**======================ACTION FUNCTION============================== */
 
 export const getWorkers = (workers) => {
@@ -50,6 +51,13 @@ export const openMapModal = (is_open:boolean) => {
     }
 }
 
+export const setSucces = (message: string) => {
+    return {
+        type:SET_SUCCESS,
+        payload:message
+    }
+}
+
 
 
 const initialState = {
@@ -58,8 +66,8 @@ const initialState = {
     error:"",
     worker_attendances:[],
     attendances_detail:{},
-    open_map_modal:false
-    
+    open_map_modal:false,
+    success:""
 }
 
 /**======================ACTION FUNCTION============================== */
@@ -97,7 +105,11 @@ const workerReducers = (state = initialState, action) => {
                 ...state,
                 open_map_modal:action.payload
             }
-        
+        case SET_SUCCESS:
+            return {
+                ...state,
+                success:action.payload
+            }
         default:
             return state
     }
