@@ -22,7 +22,7 @@ class Register extends React.Component<RegisterProps> {
     }
 
     componentDidMount(){
-        Auth(['company'])
+        Auth(['company']);
     }
 
     public submit(e: any){
