@@ -11,20 +11,20 @@ interface BingMapProps {
 const getMap = (props) => {
     const { check_in_lat, check_in_lng, check_out_lat, check_out_lng } = props.attendances_detail
     const me = JSON.parse(localStorage.getItem("me") || "{}")
-    console.log(me)
+
     // @ts-ignore
     var map = new Microsoft.Maps.Map('#myMap', {
         credentials: "AhkL3-tgHzlKs49gq7u_ZYfINXlkiPlkUGT619tCypvojRcZYNV7MrptnjZ8dR4z",
         // @ts-ignore
-        center: new Microsoft.Maps.Location(0.5688198302383811, 123.04856709606149),
+        center: new Microsoft.Maps.Location(0.4990459556379193, 122.07178492724702),
         zoom: 17
     });
     // @ts-ignore
 
     // @ts-ignore
     const office_location = new Microsoft.Maps.Pushpin({
-        latitude: 0.5688198302383811,
-        longitude: 123.04856709606149
+        latitude: 0.4990459556379193,
+        longitude: 122.07178492724702
     }, {
         title: 'Kantor',
         color: 'red',
@@ -63,7 +63,7 @@ const BingMap = (props: BingMapProps) => {
         if(isReferesh){
             setTimeout(() => {
                 getMap(props);
-            },1800)
+            },1900)
         }
     })
     useEffect(() => {
@@ -80,7 +80,11 @@ const BingMap = (props: BingMapProps) => {
     return (
         <div className="relative">
             <div id="myMap" className="flex" style={{ width: "40vw", height: 400 }}></div>
-            <Script src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhkL3-tgHzlKs49gq7u_ZYfINXlkiPlkUGT619tCypvojRcZYNV7MrptnjZ8dR4z' async defer />
+            <Script 
+            onLoad={() => {
+                getMap(props);
+            }}
+            src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhkL3-tgHzlKs49gq7u_ZYfINXlkiPlkUGT619tCypvojRcZYNV7MrptnjZ8dR4z' async defer />
         </div>
     )
 }

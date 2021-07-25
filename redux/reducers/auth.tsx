@@ -21,7 +21,7 @@ export const setAuthorized = (authorized) => {
 }
 
 
-export const setMe = (me) => {
+export const setMe = (me: any) => {
     return {
         type:SET_ME,
         payload:me
@@ -50,7 +50,7 @@ const initialState = {
     email:'',
     password:'',
     error_message:'',
-    me:"",
+    me:{},
     authorized:false
 }
 

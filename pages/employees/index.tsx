@@ -39,7 +39,7 @@ interface EmployeesState {
     public async getWorkers(page: number = 1){
         fetch(`${variable.url}/workers?page=${page}`,{
             headers:{
-                "Authorization":"Bearer " + localStorage.getItem("token")
+                "Authorization":"Bearer " + localStorage.getItem("token"),
             }
         })
         .then((res) => res.json())

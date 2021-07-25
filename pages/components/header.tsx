@@ -29,7 +29,7 @@ const Header = ({ title, active, listMenu }: HeaderProps) => (
             ) : (
                 <Nav variant="tabs" defaultActiveKey={active} as="ul" >
                     {listMenu.map((e) => (
-                        <Link href={e.href}>
+                        <Link key={e.href} href={e.href}>
                             <Nav.Item as="li">
                                 <Nav.Link href={e.href} className="  font-semibold"><span className="text-gray-700">{e.title}</span></Nav.Link>
                             </Nav.Item>

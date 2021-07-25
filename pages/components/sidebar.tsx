@@ -1,15 +1,15 @@
 import { Nav } from "react-bootstrap";
 import Link from "next/link"
-
+import {TiChartBarOutline, TiGroup, TiArchive, TiCogOutline} from "react-icons/ti"
 const attr = {
     active:"bg-gray-700"
 }
 
 const menu = [
-    {title:"Dashboard", path:"/dashboard"},
-    {title:"Karyawan", path:"/employees"},
-    {title:"Inventaris", path:"/inventarist"},
-    {title:"Pengaturan", path:"/settings"},
+    {title:"Dashboard", path:"/dashboard", icon:TiChartBarOutline},
+    {title:"Karyawan", path:"/employees", icon:TiGroup},
+    {title:"Inventaris", path:"/inventarist", icon:TiArchive},
+    {title:"Pengaturan", path:"/settings", icon:TiCogOutline},
 ];
 
 interface SideBarProps {
@@ -26,7 +26,18 @@ const SideBar = ({ active }: SideBarProps) => {
             <div className="bottom-side-bar px-4 py-6">
                 <Nav className="flex-column">
                     {menu.map((e) => {
-                        return  <Nav.Link key={Math.random() } className={`font-bold hover:bg-gray-700 transition-all outline-none  ${(active === e.title) ? attr.active : ''}`}><Link href={e.path}><span className="text-white">{e.title}</span></Link></Nav.Link>
+                        return  (
+                            <Nav.Link key={Math.random() } className={`font-bold hover:bg-gray-700 transition-all outline-none  ${(active === e.title) ? attr.active : ''}`}>
+                                <Link href={e.path}>
+                                    <div className="flex flex-row">
+                                        <div className="flex flex-col justify-center ">
+                                            <e.icon size={22} color="white"></e.icon>
+                                        </div>
+                                        <span className="text-white text-lg ml-2">{e.title} </span>
+                                    </div>
+                                </Link>
+                            </Nav.Link>
+                        )
                     })}
                 </Nav>
             </div>
